@@ -1,43 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace FacadePattern
 {
-    public enum BookingType
+    public class BookerFacade: IBooker
     {
-        Hotel,
-        Event,
-        Activity
-    }
+        private readonly Dictionary<string, IBooker> _bookers = new Dictionary<string, IBooker>();
 
-    public class BookerFacade
-    {
-        private Dictionary<string, BookingType> _bookingTypes =
-            new Dictionary<string, BookingType>();
-
-        public void AddBooking(string name, BookingType type)
+        public void Register(string name, IBooker booker)
         {
-            _bookingTypes[name] = type;
+            _bookers[name] = booker;
         }
 
         public void Book(string name, IDictionary<string, object> args)
         {
-            var type = _bookingTypes[name];
-
-            switch (type)
+            if (_bookers.TryGetValue(name, out IBooker booker))
             {
-                case BookingType.Hotel:
-                    new RoomBooker().Book(name, (string)args["Room"], (DateTime)args["Start"],
-                        (DateTime)args["End"]);
-                    break;
-                case BookingType.Event:
-                    new EventBooker().Book(name, (DateTime)args["Date"]);
-                    break;
-                case BookingType.Activity:
-                    new ActivityBooker().Book(name, (DateTime)args["Date"]);
-                    break;
-                default:
-                    break;
+                booker.Book(name, args);
+            }
+            else
+            {
+                throw new KeyNotFoundException($"There is no booker registered for {name}");
             }
         }
     }

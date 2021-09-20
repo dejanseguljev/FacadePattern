@@ -24,9 +24,9 @@ namespace FacadePattern.Console
             var facade = new BookerFacade();
 
             // We need to register our bookings. This is done only once and can be retrieved from the database.
-            facade.AddBooking("Salto Chico", BookingType.Hotel);
-            facade.AddBooking("Olympic Games", BookingType.Event);
-            facade.AddBooking("Swimming", BookingType.Activity);
+            facade.Register("Salto Chico", new RoomBooker());
+            facade.Register("Olympic Games", new EventBooker());
+            facade.Register("Swimming", new ActivityBooker());
 
             // Make bookings
             facade.Book("Salto Chico", new Dictionary<string, object> {

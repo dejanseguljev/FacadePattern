@@ -12,7 +12,7 @@ namespace FacadePattern
 
     public class BookerFacade
     {
-        private Dictionary<string, BookingType> _bookingTypes =
+        private readonly Dictionary<string, BookingType> _bookingTypes =
             new Dictionary<string, BookingType>();
 
         public void AddBooking(string name, BookingType type)
